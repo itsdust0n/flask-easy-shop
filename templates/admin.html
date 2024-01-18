@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}index{% endblock %}
+{% block custom_style %}
+body {
+    background-color:#111111;
+}
+
+.container {
+    padding: 39.9vh !important;
+}
+
+form {
+    padding-bottom: 5vh;
+    padding-top: 5vh;
+}
+{% endblock %}
+{% block custom_js %}{% endblock %}
+
+
+{% block content %}
+<form action="" method="post">
+    <input type="text" name="login" placeholder="login">
+    <input type="password" name="pass" id="pass" placeholder="password">
+    <input type="submit" value="login">
+</form>
+{% endblock %}
