@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin | add item - {{ info.brand }}{% endblock %}
+{% block custom_style %}
+body {
+    background-color:#111111;
+}
+{% endblock %}
+
+{% block custom_js %}
+{% endblock %}
+
+{% block content %}
+
+<form action="" method="post">
+    <input type="text" name="name" placeholder="name">
+    <input type="text" name="description" placeholder="description">
+    <input type="text" name="picture" placeholder="picture link">
+    <input type="number" name="shipping" placeholder="shipping price">
+    <input type="number" name="price" placeholder="item price">
+    <input type="submit" value="add">
+</form>
+{% endblock %}
