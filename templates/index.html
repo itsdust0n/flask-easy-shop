@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Home page - {{ info.brand }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
+  <style>
+	a {
+		text-decoration: none;
+		color:currentcolor;
+	}
+  </style>
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div class="site-wrap bg">
+	<header class="header wrapper">
+		<h1 class="header__brand" id="brand-name">{{ info.brand }}</h1>
+		<p class="header__tagline">{{ info.brand_slogan }}</p>
+		<svg hidden viewBox="0 0 640 512" width="100" title="shoe-logo" id="logo">
+			<path d="M192 160h32V32h-32c-35.35 0-64 28.65-64 64s28.65 64 64 64zM0 416c0 35.35 28.65 64 64 64h32V352H64c-35.35 0-64 28.65-64 64zm337.46-128c-34.91 0-76.16 13.12-104.73 32-24.79 16.38-44.52 32-104.73 32v128l57.53 15.97c26.21 7.28 53.01 13.12 80.31 15.05 32.69 2.31 65.6.67 97.58-6.2C472.9 481.3 512 429.22 512 384c0-64-84.18-96-174.54-96zM491.42 7.19C459.44.32 426.53-1.33 393.84.99c-27.3 1.93-54.1 7.77-80.31 15.04L256 32v128c60.2 0 79.94 15.62 104.73 32 28.57 18.88 69.82 32 104.73 32C555.82 224 640 192 640 128c0-45.22-39.1-97.3-148.58-120.81z" />
+		</svg>
+	</header>
+	<main class="main">
+		<section class="clearance">
+			<div class="clearance__intro wrapper flow">
+				<h2>Clearance Items</h2>
+				<p class="category-description flow">{{ info.clearance_subheader }}</p>
+			</div>
+				{% for item in items %}
+				<div class="clearance__item item wrapper flow bg">
+				<article class="item__top flow">
+					<h3 class="item__heading">{{ item.name }}</h3>
+					<figure class="item__figure figure">
+						<img class="figure__image" src="{{ item.picture_link }}" alt="picture">
+						<!-- full size image at: https://images.unsplash.com/photo-1560072810-1cffb09faf0f -->
+						<figcaption class="figure__caption">{{ figure_caption }}</figcaption>
+					</figure>
+					<p class="item__description description">
+						{{ item.description }}</p>
+					<div class="small">
+						<p class="price">{{ item.price }}₽</p>
+						{% if item.shipping_price == 0 %}
+						<p class="special">Free Shipping!</p>
+						{% else %}
+						<p class="special">{{ item.shipping_price }}₽ for shipping (outside {{ info.base_city }})</p>
+						{% endif %}
+					</div>
+				</article>
+<!--				<article class="item__bottom options">-->
+<!--					<div class="option">-->
+<!--						<label for="size-select">Size:</label>-->
+<!--						<select name="size" id="size-select">-->
+<!--							<option value=""></option>-->
+<!--							<option value="6">6</option>-->
+<!--							<option value="6.5">6.5</option>-->
+<!--							<option value="7" disabled>7</option>-->
+<!--							<option value="7">7.5</option>-->
+<!--							<option value="8">8</option>-->
+<!--							<option value="9">9</option>-->
+<!--							<option value="9.5" disabled>9.5</option>-->
+<!--							<option value="10">10</option>-->
+<!--						</select>-->
+<!--					</div>-->
+<!--					<div class="option">-->
+<!--						<label for="color-select">Color:</label>-->
+<!--						<select name="color" id="color-select">-->
+<!--							<option value=""></option>-->
+<!--							<option value="blue">blue</option>-->
+<!--							<option value="red">red</option>-->
+<!--							<option value="black">black</option>-->
+<!--						</select>-->
+<!--					</div>-->
+<!--					<div class="option">-->
+<!--						<label for="quantity-select">Quantity:</label>-->
+<!--						<select name="quantity" id="quantity-select">-->
+<!--							<option value=""></option>-->
+<!--							<option value="1">1</option>-->
+<!--							<option value="2">2</option>-->
+<!--							<option value="3">3</option>-->
+<!--							<option value="4">4</option>-->
+<!--							<option value="5">5</option>-->
+<!--						</select>-->
+<!--					</div>-->
+<!--				</article>-->
+				<button class="cta" type="button"><a href="{{ info.contact_link }}">Contact</a></button>
+			</div>
+			{% endfor %}
+
+		</section>
+	</main>
+</div>
+<!-- partial -->
+  
+</body>
+</html>
