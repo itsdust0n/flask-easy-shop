@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin | remove item - {{ info.brand }}{% endblock %}
+{% block custom_style %}
+body {
+    background-color:#111111;
+}
+
+input {
+    margin-bottom: 0px;
+    border-radius: 8px;
+    background-color: #212020;
+    color: #dbdbdb;
+    padding: 4px 14px;
+    border: 1px solid #2d2c2c;
+}
+
+form {
+    display: flex;
+    justify-content: center;
+    margin-top:auto;
+    margin-right:0px;
+    margin-left:0px;
+    margin-bottom:auto;
+    width:1vw;
+    height:0px;
+    animation: appearing 0.4s ease 0s 1 normal forwards;
+}
+
+/*button {
+    background: #2d2c2c;
+    border-radius: 8px;
+    border: 1px solid #3d3d3d;
+    color: #dbdbdb;
+}*/
+
+button {
+    transition: color 0.2s;
+    background: transparent;
+    /* border-radius: 8px; */
+    border: transparent;
+    color: #8e8e8e;
+}
+
+button:hover {
+    transition: color 0.2s;
+    color:#dbdbdb;
+}
+
+input {
+    display:none;
+}
+
+{% endblock %}
+
+{% block custom_js %}
+{% endblock %}
+
+{% block content %}
+
+<!-- <form action="" method="post">
+    <input type="text" name="name" placeholder="name">
+    <input type="text" name="description" placeholder="description">
+    <input type="text" name="picture" placeholder="picture link">
+    <input type="number" name="shipping" placeholder="shipping price">
+    <input type="number" name="price" placeholder="item price">
+    <input type="submit" value="add">
+</form> -->
+
+{% for item in items %}
+<div class="item">
+    <article class="soft-item">
+        <div class="container-item" data-uwebp="true">
+            <div class="item-picture">
+                <img src="{{ item.picture_link }}" style="border-radius:8px;" width="56" height="56" alt="picture">
+            </div>
+            <div class="item-name-container">
+                <p class="item-name">{{ item.name }}</p>
+            </div>
+            <div class="item-short-description">{{ item.description }}</div>
+            <div class="item-short-price">{{ item.price }}</div>
+
+            <form method="post">
+                <input type="text" name="item-name" value="{{ item.name }}">
+                <button type="submit"><i class="fa-solid fa-trash"></i></button>
+            </form>
+        </div>
+    </article>
+</div>
+{% endfor %}
+{% endblock %}
