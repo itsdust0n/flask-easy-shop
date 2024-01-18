@@ -3,10 +3,10 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-# db = sqlite3.connect('app.db', check_same_thread=False)
 app.config['SECRET_KEY'] = str(os.urandom(20).hex())
 app.debug = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/top/Downloads/razvlekaus s flask/app.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/top/Downloads/razvlekaus s flask/app.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/balenkoe/Documents/Wonert Team/github/flask-easy-shop/app.db'
 db = SQLAlchemy(app)
 
 
@@ -50,14 +50,6 @@ class Users(db.Model):
 @app.route('/')
 def index():
     items = Items.query.order_by(Items.id).all()
-    # return render_template('index.html',
-    #                        item_name="dddddd",
-    #                        item_picture="",
-    #                        item_picture_alt="",
-    #                        figure_caption="",
-    #                        item_description="lorem ipsum",
-    #                        item_price="10",
-    #                        item_shipping_price="0")
     return render_template('index.html', items=items, info=info)
 
 
@@ -71,14 +63,11 @@ def admin():
             login = request.form.get('login')
             pwd = request.form.get('pass')
 
-            if all([login, pwd]) and all([login, pwd]) is not None:  # @todo: add db close
-                # cursor = db.cursor()
-                # req = cursor.execute(f"SELECT * FROM users WHERE login = '{login}'").fetchone()
-                # db.commit() Users.query.filter_by(password=pwd).first()
-                # print(req)
+            if all([login, pwd]) and all([login, pwd]) is not None:
                 user = Users.query.filter_by(login=login).first()
                 if user is not None and login == user.login and pwd == user.password:
-                    session['isAuthenticated'] = 1
+                    try: session['isAuthenticated'] = 1
+                    except Exception as e: print(f"Error while adding session data: {e}")
                     return redirect(url_for('add_item'))
 
     return render_template('admin.html')
@@ -96,13 +85,14 @@ def add_item():
                 picture_link = request.form.get('picture')
                 shipping_price = request.form.get('shipping')
                 item_price = request.form.get('price')
-                if all([name, description, picture_link, shipping_price, item_price]):
+
+                if all([name, description, picture_link, shipping_price, item_price]) and all([name, description, picture_link, shipping_price, item_price]) is not None:
                     try:
                         db.session.add(Items(name=name, description=description, picture_link=picture_link, shipping_price=shipping_price, price=item_price))
                         db.session.commit()
                         print("Added")
-                    except:
-                        print('Error')
+                    except Exception as e:
+                        print(f"Error while contact with db: {e}")
             return render_template('add_item.html', info=info, navbar=True, navbar_index=0)
         else:
             return redirect(url_for('index'))
@@ -115,12 +105,16 @@ def remove_item():
     else:
         if session['isAuthenticated'] == 1:
             items = Items.query.order_by(Items.id).all()
-            if request.method == "POST":
-                to_delete = Items.query.filter(name=f'{request.form.get("items-name")}').first()
-                print(to_delete.name)
-                db.session.delete(name=to_delete.name, description=to_delete.description, picture_link=to_delete.picture_link, price=to_delete.price, shipping=to_delete.shipping_price)
-                db.session.commit()
-                print('Removed')
+            if request.method == "POST" and request.form.get('item-name') is not None:
+                to_delete = Items.query.filter_by(name=f'{request.form.get("item-name")}').first()
+                # print(f"name: {to_delete.name}, description: {to_delete.description}, picture_link: {to_delete.picture_link}, price: {to_delete.price}, shipping_price: {to_delete.shipping_price}")
+                # print(f"obj: {Items(name=to_delete.name, description=to_delete.description, picture_link=to_delete.picture_link, price=to_delete.price, shipping_price=to_delete.shipping_price)}")
+                try:
+                    db.session.delete(to_delete)
+                    db.session.commit()
+                    print('Removed')
+                except Exception as e:
+                    print(f"Error while contact with db: {e}")
             return render_template('remove_item.html', info=info, navbar=True, navbar_index=1, items=items)
         else:
             return redirect(url_for('index'))
@@ -140,8 +134,8 @@ def add_user():
                         db.session.add(Users(login=login, password=pwd))
                         db.session.commit()
                         print('Added')
-                    except:
-                        print('Error')
+                    except Exception as e:
+                        print(f"Error while contact with db: {e}")
             return render_template('add_user.html', info=info, navbar=True, navbar_index=2)
         else:
             return redirect(url_for('index'))
@@ -153,7 +147,8 @@ def logout():
         return redirect(url_for('index'))
     else:
         if session['isAuthenticated'] == 1:
-            session['isAuthenticated'] = 0
+            try: session['isAuthenticated'] = 0
+            except Exception as e: print('Error while contact with session data: ', e)
             return redirect(url_for('admin'))
         else:
             return redirect(url_for('index'))
