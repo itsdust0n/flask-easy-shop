@@ -2,10 +2,11 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = str(os.urandom(20).hex())
 app.debug = True
-if os.name == 'nt': app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/top/Downloads/razvlekaus s flask/app.db'
+if os.name == "nt": app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/top/Downloads/git/flask-easy-shop/app.db'
 else: app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/balenkoe/Documents/Wonert Team/github/flask-easy-shop/app.db'
 db = SQLAlchemy(app)
 
@@ -79,7 +80,7 @@ def add_item():
         return redirect(url_for('index'))
     else:
         if session['isAuthenticated'] == 1:
-            if request.method == 'POST':  # @todo: add db close
+            if request.method == 'POST':
                 name = request.form.get('name')
                 description = request.form.get('description')
                 picture_link = request.form.get('picture')
@@ -107,8 +108,6 @@ def remove_item():
             items = Items.query.order_by(Items.id).all()
             if request.method == "POST" and request.form.get('item-name') is not None:
                 to_delete = Items.query.filter_by(name=f'{request.form.get("item-name")}').first()
-                # print(f"name: {to_delete.name}, description: {to_delete.description}, picture_link: {to_delete.picture_link}, price: {to_delete.price}, shipping_price: {to_delete.shipping_price}")
-                # print(f"obj: {Items(name=to_delete.name, description=to_delete.description, picture_link=to_delete.picture_link, price=to_delete.price, shipping_price=to_delete.shipping_price)}")
                 try:
                     db.session.delete(to_delete)
                     db.session.commit()
