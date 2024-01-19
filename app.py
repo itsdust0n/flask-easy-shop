@@ -5,8 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 app.config['SECRET_KEY'] = str(os.urandom(20).hex())
 app.debug = True
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/top/Downloads/razvlekaus s flask/app.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/balenkoe/Documents/Wonert Team/github/flask-easy-shop/app.db'
+if os.name == 'nt': app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/top/Downloads/razvlekaus s flask/app.db'
+else: app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/balenkoe/Documents/Wonert Team/github/flask-easy-shop/app.db'
 db = SQLAlchemy(app)
 
 
