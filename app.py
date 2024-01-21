@@ -86,8 +86,9 @@ def add_item():
                 picture_link = request.form.get('picture')
                 shipping_price = request.form.get('shipping')
                 item_price = request.form.get('price')
+                form_data = all([name, description, picture_link, shipping_price, item_price])
 
-                if all([name, description, picture_link, shipping_price, item_price]) and all([name, description, picture_link, shipping_price, item_price]) is not None:
+                if form_data and form_data is not None:
                     try:
                         db.session.add(Items(name=name, description=description, picture_link=picture_link, shipping_price=shipping_price, price=item_price))
                         db.session.commit()
@@ -100,7 +101,7 @@ def add_item():
 
 
 @app.route('/admin/remove_item', methods=['post', 'get'])
-def remove_item():
+def remove_item(): # @todo::: fix bug: when you trying to delete item with name that has other item, deleting first in db.
     if 'isAuthenticated' not in session:
         return redirect(url_for('index'))
     else:
