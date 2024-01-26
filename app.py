@@ -3,11 +3,11 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 
 
+basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 app.config['SECRET_KEY'] = str(os.urandom(20).hex())
 app.debug = True
-if os.name == "nt": app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/top/Downloads/git/flask-easy-shop/app.db'
-else: app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/balenkoe/Documents/Wonert Team/github/flask-easy-shop/app.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(basedir, "app.db")}'
 db = SQLAlchemy(app)
 
 
