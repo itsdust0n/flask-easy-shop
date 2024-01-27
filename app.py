@@ -101,14 +101,21 @@ def add_item():
 
 
 @app.route('/admin/remove_item', methods=['post', 'get'])
-def remove_item(): # @todo::: fix bug: when you trying to delete item with name that has other item, deleting first in db.
+def remove_item():
     if 'isAuthenticated' not in session:
         return redirect(url_for('index'))
     else:
         if session['isAuthenticated'] == 1:
             items = Items.query.order_by(Items.id).all()
-            if request.method == "POST" and request.form.get('item-name') is not None:
-                to_delete = Items.query.filter_by(name=f'{request.form.get("item-name")}').first()
+            if request.method == "POST" and all([request.form.get('item-name'), request.form.get('item-description'), request.form.get('item-picture_link'), request.form.get('item-price')], request.form.get('item-shipping_price')) is not None:
+                to_delete = Items.query.filter_by(
+                    name=f'{request.form.get("item-name")}',
+                    description=f'{request.form.get("item-description")}',
+                    picture_link=f'{request.form.get("item-picture_link")}',
+                    price=f'{request.form.get("item-price")}',
+                    shipping_price=f'{request.form.get("item-shipping_price")}'
+                ).first()
+
                 try:
                     db.session.delete(to_delete)
                     db.session.commit()
